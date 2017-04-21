@@ -17,6 +17,6 @@ def skyscanner(request):
         inbounddate= '2017-05-31').parsed
     para = result['Quotes'][0]['MinPrice']
     
-    return HttpResponse(para)
+    return HttpResponse(result)
     
     
