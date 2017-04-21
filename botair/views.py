@@ -1,8 +1,18 @@
 from django.views import generic
 from django.http.response import HttpResponse
+import json
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+import requests, pprint
+
 # Create your views here.
 
-
+def post_facebook_message(fbid, recevied_message):           
+        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=<page-access-token>' 
+        response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":recevied_message}})
+        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+        pprint(status.json())
 
 
 class BotairView(generic.View):
@@ -10,6 +20,8 @@ class BotairView(generic.View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return generic.View.dispatch(self, request, *args, **kwargs)
+    
+
 
     # Post function to handle Facebook messages
     def post(self, request, *args, **kwargs):
@@ -29,11 +41,7 @@ class BotairView(generic.View):
                     post_facebook_message(message['sender']['id'], message['message']['text'])      
         return HttpResponse()
     
-    def post_facebook_message(fbid, recevied_message):           
-        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=<page-access-token>' 
-        response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":recevied_message}})
-        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        pprint(status.json())
+
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
 #        if self.request.GET['hub.verify_token'] == '150120017150120021150130281':

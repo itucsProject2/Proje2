@@ -12,11 +12,11 @@ def skyscanner(request):
         currency = 'TRY',
         locale = 'tr-TR',
         originplace = 'IST-sky',
-        destinationplace = 'CAN-sky',
+        destinationplace = 'SIN-sky',
         outbounddate = '2017-05-28',
         inbounddate= '2017-05-31').parsed
     para = result['Quotes'][0]['MinPrice']
-    
-    return HttpResponse(result)
+    #para = result.json()
+    return HttpResponse(para)
     
     
