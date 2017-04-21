@@ -12,7 +12,7 @@ def skyscanner(request):
         currency = 'TRY',
         locale = 'tr-TR',
         originplace = 'IST-sky',
-        destinationplace = 'JFK-sky',
+        destinationplace = 'CAN-sky',
         outbounddate = '2017-05-28',
         inbounddate= '2017-05-31').parsed
     para = result['Quotes'][0]['MinPrice']
