@@ -4,7 +4,8 @@ import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-import requests, pprint
+import requests
+from pprint import pprint
 
 # Create your views here.
 
