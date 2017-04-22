@@ -24,26 +24,26 @@ def flightQuery(request):
     
     query = ['bos'] * 6
     query[0] = 'USD'
-    query[1] = place('adana')   # origin place
-    query[2] = place('hatay')  # destination place
+    query[1] = place('istan')   # origin place
+    query[2] = place('new york')  # destination place
     query[3] = '2017-05' # outbounddate
     query[4] = '' # inbounddate
     query[5] = 1        # kac tane sonuc istiyor
     if query[1] == '' or query[2] == '':
         return HttpResponse("ADAM GIBI ARAMA YAP LAN")
     
-    if (len(query[3]) == len(query[3])) or (len(query[4]) == 0 and len(query[3]) > 0):  # TARIH KONTROL
+    if (len(query[3]) == len(query[4])) or (len(query[4]) == 0 and len(query[3]) > 0):  # TARIH KONTROL
         a = cheapestQuotes(query)
         if  a == None:
             return HttpResponse("ADAM GIBI ARAMA YAP LAN")
         else:
-            return HttpResponse(a)
+            return HttpResponse(str(a))
     else:
         return HttpResponse('Hatali Tarih')
 
 def cheapestQuotes(query):
     
-    data = json.loads(json.dumps({'price': 0, 'out': {'date': '', 'place':'', 'carrier':''}, 'in':{'date': '', 'place':' ', 'carrier':''}})) # direct???
+    data = json.loads(json.dumps({'price': 0, 'out': {'date': '', 'place':'', 'carrier':''}, 'in':{'date': '', 'place':'', 'carrier':''}})) # direct???
     flights_cache_service = FlightsCache('bo222919948041713910427845435861')
     #return HttpResponse(query)
     result = flights_cache_service.get_cheapest_quotes(
@@ -74,10 +74,10 @@ def cheapestQuotes(query):
         data['in']['date'] = result['Quotes'][0]['InboundLeg']['DepartureDate']
     
     for i in range(0, len(result['Places'])):   # DEPARTURE AIRPORTS
-        if result['Places'][i]['Type'] == 'Airport' and result['Places'][i]['PlaceId'] == result['Quotes'][0]['OutboundLeg']['OriginId']:   #out
+        if result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][0]['OutboundLeg']['OriginId']:   #out
              data['out']['place'] = result['Places'][i]['Name']
              
-        if one_way != True and result['Places'][i]['Type'] == 'Airport' and result['Places'][i]['PlaceId'] == result['Quotes'][0]['InboundLeg']['OriginId']:   #in
+        if one_way != True and result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][0]['InboundLeg']['OriginId']:   #in
             data['in']['place'] = result['Places'][i]['Name']
             
     for i in range(0, len(result['Carriers'])):     # CARRIER NAMES
@@ -89,7 +89,7 @@ def cheapestQuotes(query):
     
     #para = result['Quotes'][0]['MinPrice']
     #para = result.json()
-    return data
+    return result
 
 def currencies(birim):
     
