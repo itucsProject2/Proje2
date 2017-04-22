@@ -19,10 +19,10 @@ def post_facebook_message(fbid, recevied_message):
 class BotairView(generic.View):
     def get(self, request, *args, **kwargs):
         
-        if self.request.GET.get('hub.verify_token','') == '150120017150120021150130281':
+        if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
             return HttpResponse(self.request.GET['hub.challenge'])
         else:
-            return HttpResponse(self.request.GET.get('hub.verify_token','o')) 
+            return HttpResponse('Error, invalid token') 
     
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -46,7 +46,7 @@ class BotairView(generic.View):
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly. 
                     post_facebook_message(message['sender']['id'], message['message']['text'])      
-        return HttpResponse(incoming_message['text'])
+        return HttpResponse()
     
 
 #class BotairView(generic.View):
