@@ -49,6 +49,9 @@ class BotairView(generic.View):
                     response = witOperations.sendToWit(message['message']['text']) 
                     for locations in response['entities']['locations']:
                         locationString.append(locations['value'])
+                        
+                    if locationString is None:
+                        locationString = 'no response from wit'
                     post_facebook_message(message['sender']['id'],locationString)      
         return HttpResponse()
     
