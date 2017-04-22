@@ -46,7 +46,7 @@ class BotairView(generic.View):
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly.
                    # locationString = []
-                    resp = witOperations.sendToWit(message['message']['text']) 
+                    resp = witOperations.sendToWit('message') 
                     if resp is None:
                         resp = 'nothing in here'
                     pprint('Yay, got Wit.ai response: ' + str(resp))
