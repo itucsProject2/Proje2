@@ -49,7 +49,7 @@ class BotairView(generic.View):
                     response = witOperations.sendToWit(message['message']['text']) 
                     for locations in response['entities']['locations']:
                         locationString.append(locations['value'])
-                    post_facebook_message(message['sender']['id'],response)      
+                    post_facebook_message(message['sender']['id'],locationString)      
         return HttpResponse()
     
 
