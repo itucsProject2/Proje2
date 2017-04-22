@@ -45,13 +45,13 @@ class BotairView(generic.View):
                     pprint(message)
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly.
-                    locationString = []
-                    response = witOperations.sendToWit(message['message']['text']) 
+                   # locationString = []
+                   # response = witOperations.sendToWit(message['message']['text']) 
                     #for locations in response['entities']['locations']:
                     #    locationString.append(locations['value'])
                         
-                    if locationString is None:
-                        locationString = 'no response from wit'
+                    #if locationString is None:
+                    #    locationString = 'no response from wit'
                     post_facebook_message(message['sender']['id'],locationString)      
         return HttpResponse()
     
