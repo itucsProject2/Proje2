@@ -1,15 +1,17 @@
 from django.views import generic
+from botair import witOperations
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-import requests, pprint
+import requests
+from pprint import pprint
 
 # Create your views here.
 
 def post_facebook_message(fbid, recevied_message):           
-        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=<page-access-token>' 
+        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":recevied_message}})
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
         pprint(status.json())
@@ -17,7 +19,6 @@ def post_facebook_message(fbid, recevied_message):
 
 class BotairView(generic.View):
     def get(self, request, *args, **kwargs):
-        
         if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
             return HttpResponse(self.request.GET['hub.challenge'])
         else:
@@ -43,8 +44,15 @@ class BotairView(generic.View):
                     # Print the message to the terminal
                     pprint(message)
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
-                    # are sent as attachments and must be handled accordingly. 
-                    post_facebook_message(message['sender']['id'], message['message']['text'])      
+                    # are sent as attachments and must be handled accordingly.
+                    locationString = []
+                    response = witOperations.sendToWit(message['message']['text']) 
+                    for locations in response['entities']['locations']:
+                        locationString.append(locations['value'])
+                        
+                    if locationString is None:
+                        locationString = 'no response from wit'
+                    post_facebook_message(message['sender']['id'],locationString)      
         return HttpResponse()
     
 
