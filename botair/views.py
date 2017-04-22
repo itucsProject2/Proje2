@@ -47,8 +47,8 @@ class BotairView(generic.View):
                     # are sent as attachments and must be handled accordingly.
                     locationString = []
                     response = witOperations.sendToWit(message['message']['text']) 
-                    for locations in response['entities']['locations']:
-                        locationString.append(locations['value'])
+                    #for locations in response['entities']['locations']:
+                    #    locationString.append(locations['value'])
                         
                     if locationString is None:
                         locationString = 'no response from wit'
