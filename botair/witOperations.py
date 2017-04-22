@@ -14,6 +14,9 @@ def sendToWit(messageString):
         'my_action': my_action,
     }
     client = Wit(access_token = access_token,actions = actions)
-    resp = client.message(messageString);
-    print(resp)
-    return resp
+    try:
+        resp = client.message(messageString);
+        pprint(resp)
+        return resp
+    except:
+        return('wit.ai integration error')
