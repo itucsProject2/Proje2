@@ -9,7 +9,7 @@ import requests, pprint
 # Create your views here.
 
 def post_facebook_message(fbid, recevied_message):           
-        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=<page-access-token>' 
+        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
         response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":recevied_message}})
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
         pprint(status.json())
@@ -45,7 +45,7 @@ class BotairView(generic.View):
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly. 
                     post_facebook_message(message['sender']['id'], message['message']['text'])      
-        return HttpResponse()
+        return HttpResponse(incoming_message['field'])
     
 
 #class BotairView(generic.View):
