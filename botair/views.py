@@ -46,7 +46,7 @@ class BotairView(generic.View):
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly. 
                     post_facebook_message(message['sender']['id'], message['message']['text'])      
-        return HttpResponse(incoming_message['field'])
+        return HttpResponse(incoming_message['text'])
     
 
 #class BotairView(generic.View):
