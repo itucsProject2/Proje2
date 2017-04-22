@@ -21,7 +21,7 @@ class BotairView(generic.View):
         if self.request.GET.get('hub.verify_token','') == '150120017150120021150130281':
             return HttpResponse(self.request.GET['hub.challenge'])
         else:
-            return HttpResponse(self.request.GET.get('hub.verify_token','')) 
+            return HttpResponse(self.request.GET.get('hub.verify_token','o')) 
     
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
