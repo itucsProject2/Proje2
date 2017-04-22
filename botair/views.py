@@ -50,7 +50,7 @@ class BotairView(generic.View):
                     if resp is None:
                         resp = 'nothing in here'
                     pprint('Yay, got Wit.ai response: ' + str(resp))
-                    post_facebook_message(message['sender']['id'],message['message']['text'])      
+                    post_facebook_message(message['sender']['id'],resp)      
         return HttpResponse()
     
 
