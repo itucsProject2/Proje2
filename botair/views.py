@@ -1,5 +1,5 @@
 from django.views import generic
-from witOperations import sendToWit
+from botair import witOperations
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
@@ -45,7 +45,7 @@ class BotairView(generic.View):
                     pprint(message)
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
                     # are sent as attachments and must be handled accordingly.
-                    response = sendToWit(message['message']['text']) 
+                    response = witOperations.sendToWit(message['message']['text']) 
                     post_facebook_message(message['sender']['id'],response)      
         return HttpResponse()
     
