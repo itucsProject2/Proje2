@@ -1,4 +1,5 @@
 from django.views import generic
+from witOperations import sendToWit
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
@@ -18,7 +19,6 @@ def post_facebook_message(fbid, recevied_message):
 
 class BotairView(generic.View):
     def get(self, request, *args, **kwargs):
-        
         if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
             return HttpResponse(self.request.GET['hub.challenge'])
         else:
@@ -44,8 +44,9 @@ class BotairView(generic.View):
                     # Print the message to the terminal
                     pprint(message)
                     # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
-                    # are sent as attachments and must be handled accordingly. 
-                    post_facebook_message(message['sender']['id'], message['message']['text'])      
+                    # are sent as attachments and must be handled accordingly.
+                    response = sendToWit(message['message']['text']) 
+                    post_facebook_message(message['sender']['id'],response)      
         return HttpResponse()
     
 
