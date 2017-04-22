@@ -19,6 +19,7 @@ from botair import skyscanner
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-	url(r'^$', skyscanner.skyscanner, name='skyscanner'),
-    url(r'^botair/', include('botair.urls'))    
+    url(r'^flightQuery$', skyscanner.flightQuery, name='flightQuery'),
+    url(r'^botair/', include('botair.urls')) 
 ]
+
