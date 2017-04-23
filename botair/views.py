@@ -9,6 +9,13 @@ import requests
 from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
+
+actions = {
+    'send': send,
+    'my_action':my_action,
+    
+}
+
 # Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
@@ -48,11 +55,7 @@ def my_action(request):
     print('Received from user...', request['text'])
 
 
-actions = {
-    'send': send,
-    'my_action':my_action,
-    
-}
+
 
 
 
