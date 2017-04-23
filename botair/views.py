@@ -10,18 +10,6 @@ from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
 
-actions = {
-    'send': send,
-    'my_action':my_action,
-    
-}
-
-# Setup Wit Client
-client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
-#DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
-client.interactive()
-
-
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
         response_msg =json.dumps({"recipient":{"id":fbid}, "message":{"text":message}})
@@ -42,9 +30,6 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    """
-    Sender function
-    """
     # We use the fb_id as equal to session_id
     fb_id = request['session_id']
     text = response['text']
@@ -55,9 +40,16 @@ def my_action(request):
     print('Received from user...', request['text'])
 
 
+actions = {
+    'send': send,
+    'my_action':my_action,
+    
+}
 
-
-
+# Setup Wit Client
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+#DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
+client.interactive()
 
 def getEntityFromWit(textMessage):
     try:
@@ -99,10 +91,10 @@ class BotairView(generic.View):
                     try:
                         #resp = sendToWit(str(text))
                         
-                        resp = client.run_actions(fb_id,text)
-                        pprint('trying to client.run_actions text:' + text)
-                        pprint('send to wit : ' + resp)
-                        #post_facebook_message(fb_id,resp)
+                        resp = client.run_actions(fb_id,str(text))
+                        pprint('trying to client.run_actions text:' + str(text))
+                        pprint('send to wit : ' + str(resp))
+                        #post_facebook_message(fb_id, str(resp))
                         return HttpResponse()
                     except:
                         post_facebook_message(fb_id,'wit.ai error') 
