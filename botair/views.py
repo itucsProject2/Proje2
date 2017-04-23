@@ -10,7 +10,6 @@ from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
 
-
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
         data = {
@@ -19,6 +18,7 @@ def post_facebook_message(fbid, message):
         }
         status = requests.post(post_message_url, json=data)
         pprint(status.json())
+
 
 def first_entity_value(entities, entity):
     """
@@ -55,13 +55,13 @@ actions = {
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 
-def sendToWit(textMessage):
+def getEntityFromWit(textMessage):
     try:
         resp = client.message(textMessage)
-        pprint('send to wit' + resp)
+        pprint('getEntityFromWit: get from wit:' + resp)
         return resp
     except:
-        return('send to wit.ai error')
+        return('getEntityFromWit: send to wit.ai error')
         
 
 
