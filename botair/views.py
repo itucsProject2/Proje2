@@ -15,7 +15,7 @@ def post_facebook_message(fbid, message):
         response_msg =json.dumps({"recipient":{"id":fbid}, "message":{"text":message}})
       
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        pprint('In post_facebook_message function: ' + status.json())
+        pprint('In post_facebook_message function: ' + str(status.json()))
 
 
 def first_entity_value(entities, entity):
@@ -54,7 +54,7 @@ client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 def getEntityFromWit(textMessage):
     try:
         resp = client.message(textMessage)
-        pprint('getEntityFromWit: get from wit:' + resp)
+        pprint('getEntityFromWit: get from wit:' + str(resp))
         return resp
     except:
         return('getEntityFromWit: send to wit.ai error')
