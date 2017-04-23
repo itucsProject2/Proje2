@@ -51,7 +51,7 @@ actions = {
 
 
 # Setup Wit Client
-client = Wit(access_token=WIT_TOKEN, actions=actions)
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 
 
