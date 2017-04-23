@@ -33,6 +33,7 @@ def send(request, response):
     # We use the fb_id as equal to session_id
     fb_id = request['session_id']
     text = response['text']
+    pprint('In send, text = ' + str(text))
     # send message
     post_facebook_message(fb_id, text)
 
