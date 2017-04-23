@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import requests
 from pprint import pprint
+from django.core.handlers.exception import response_for_exception
+
 
 
 def post_facebook_message(fbid, message):           
@@ -39,7 +41,6 @@ def send(request, response):
     # send message
     post_facebook_message(fb_id, text)
 
-
 def my_action(request):
     print('Received from user...', request['text'])
 
@@ -50,9 +51,17 @@ actions = {
     
 }
 
-
 # Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+
+def sendToWit(textMessage):
+    try:
+        resp = client.message(textMessage)
+        pprint('send to wit' + resp)
+        return resp
+    except:
+        return('send to wit.ai error')
+        
 
 
 class BotairView(generic.View):
@@ -83,7 +92,9 @@ class BotairView(generic.View):
                 fb_id = message['sender']['id']
                 text = message['message']['text']
                 try:
-                    client.run_actions(session_id=fb_id, message=text)
+                    resp = sendToWit(text)
+                    post_facebook_message(fb_id, resp)
+                    #client.run_actions(session_id=fb_id, message=text)
                     return HttpResponse()
                 except:
                     post_facebook_message(fb_id,'wit.ai error') 
