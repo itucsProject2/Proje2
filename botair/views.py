@@ -47,7 +47,7 @@ def checkInfo():
     print()
 
 def resetAll(context,entities):
-    initializeWit()
+    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 def printFlights():
     print()
@@ -60,9 +60,6 @@ actions = {
     'printFlighs': printFlights,
 }
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
-# Setup Wit Client
-def initializeWit():
-    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
