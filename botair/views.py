@@ -47,7 +47,7 @@ def checkInfo():
     print()
 
 def resetAll():
-    print()
+    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 def printFlights():
     print()
