@@ -12,12 +12,10 @@ from django.core.handlers.exception import response_for_exception
 
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
-        data = {
-            'recipent':{'id': fbid},
-            'message':{'text':message}
-        }
-        status = requests.post(post_message_url, json=data)
-        pprint(status.json())
+        response_msg =json.dumps({"recipient":{"id":fbid}, "message":{"text":message}})
+      
+        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+        pprint('In post_facebook_message function: ' + str(status.json()))
 
 
 def first_entity_value(entities, entity):
@@ -32,33 +30,44 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    """
-    Sender function
-    """
     # We use the fb_id as equal to session_id
     fb_id = request['session_id']
     text = response['text']
+    pprint('In send, text = ' + str(text))
+    t = str(text)
+    t = t[:-1]
+    t = t[2:]
     # send message
-    post_facebook_message(fb_id, text)
+    post_facebook_message(fb_id, str(t))
 
 def my_action(request):
     print('Received from user...', request['text'])
+    
+def checkInfo():
+    print()
 
+def resetAll(context,entities):
+    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+
+def printFlights():
+    print()
 
 actions = {
     'send': send,
-    'receive':my_action,
-    
+    'my_action':my_action,
+    'checkInfo': checkInfo,
+    'resetAll': resetAll,
+    'printFlighs': printFlights,
 }
-
-# Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
+#client.interactive()
 
 def getEntityFromWit(textMessage):
     try:
         resp = client.message(textMessage)
-        pprint('getEntityFromWit: get from wit:' + resp)
+        pprint('getEntityFromWit: get from wit:' + str(resp))
         return resp
     except:
         return('getEntityFromWit: send to wit.ai error')
@@ -85,38 +94,26 @@ class BotairView(generic.View):
         # Facebook recommends going through every entry since they might send
         # multiple messages in a single call during high load
         for entry in incoming_message['entry']:
-            messages = entry['messaging']
-            pprint(messages)
-            if messages[0]:
-                # Get the first message
-                message = messages[0]
-                fb_id = message['sender']['id']
-                text = message['message']['text']
-                try:
-                    resp = sendToWit(str(text))
-                    pprint('send to wit : ' + resp)
-                    #post_facebook_message(fb_id, resp)
-                    client.run_actions(session_id=fb_id, message=text)
-                    return HttpResponse()
-                except:
-                    post_facebook_message(fb_id,'wit.ai error') 
-                    return HttpResponse()    
-              
-            else:
-                 # Returned another event
-                 pprint('another event')
-                 return 'Received Different Event'
-                
-                    # Print the message to the terminal
-                
-             
-                    #resp = witOperations.sendToWit(message['message']['text']) 
-                    #if resp is None:
-                     #   resp = 'nothing in here'
-                    #pprint('Yay, got Wit.ai response: ' + str(resp))
-                 #   post_facebook_message(message['sender']['id'],str(resp))      
-    #    return HttpResponse()
-    
+            
+            for message in entry['messaging']:
+           
+                if 'message' in message:
+                    pprint('Message in post:' + str(message)) 
+                    fb_id = message['sender']['id']
+                    text = message['message']['text']
+                    try:
+                        #resp = sendToWit(str(text))
+                        pprint('trying to client.run_actions text:' + str(text))
+                        client.run_actions(fb_id,text)
+                        #pprint('resp to wit : ' + str(resp))
+                        
+                        #post_facebook_message(fb_id, str(resp))
+                        return HttpResponse()
+                    except Exception as e:
+                        post_facebook_message(fb_id,'wit.ai error:' + str(e)) 
+                        return HttpResponse()
+                    
+                return HttpResponse()
 
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
