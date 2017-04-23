@@ -36,8 +36,8 @@ def send(request, response):
     Sender function
     """
     # We use the fb_id as equal to session_id
-    fb_id = request['session_id']
-    text = response['text']
+    fb_id = request['action_id']
+    text = response['msg']
     # send message
     post_facebook_message(fb_id, text)
 
