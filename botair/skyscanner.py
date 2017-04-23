@@ -1,7 +1,7 @@
 from skyscanner.skyscanner import Flights
 from skyscanner.skyscanner import FlightsCache
 from django.http import HttpResponse
-import requests, json
+import requests, json, datetime
 
 
 def livePrices(request):
@@ -26,23 +26,30 @@ def flightQuery(request):
     query[0] = 'USD'
     query[1] = place('ataturk')   # origin place
     query[2] = place('rome')  # destination place
-    query[3] = date('12.05.2017') # outbounddate
-    query[4] = date('')# inbounddate
+    query[3] = None # outbounddate
+    query[4] = None                 # inbounddate
     query[5] = 1        # kac tane sonuc istiyor
-    if query[1] == '' or query[2] == '':
-        return HttpResponse("ADAM GIBI ARAMA YAP LAN1")
     
-    if (len(query[3]) == len(query[4])) or (len(query[4]) == 0 and len(query[3]) > 0):  # TARIH KONTROL
-        a = cheapestQuotes(query)
-        if  a == None:
-            return HttpResponse("ADAM GIBI ARAMA YAP LAN2")
-        else:
-            return HttpResponse(str(a))
+    a = cheapestQuotes(query)
+    if  a == None:
+        return HttpResponse("ADAM GIBI ARAMA YAP SEKER COCUK")
     else:
-        return HttpResponse('Hatali Tarih')
+        return HttpResponse(str(a))
 
 def cheapestQuotes(query):
     
+    if query[4] == None:
+        query[4] = ''
+        
+    if  query[3] == None:
+        query[3] = str(datetime.date.today())
+        
+    if query[1] == '' or query[2] == '':
+        return None
+    
+    if (len(query[4]) != 0 and (len(query[3]) != len(query[4]))) or (len(query[4]) == 0 and len(query[3]) == 0):
+        return None
+        
     if query[4] == '':
         one_way = True
     else:
@@ -61,7 +68,7 @@ def cheapestQuotes(query):
         outbounddate = query[3],
         inbounddate= query[4]).parsed
     
-    if len(result['Quotes']) == 0:
+    if len(result['Quotes']) == 0:  # parametrelere uyan sonuc yok
         #return HttpResponse('ADAM GIBI ARAMA YAP LAN1')
         data = None
         return data
