@@ -97,7 +97,7 @@ class BotairView(generic.View):
                         pprint('trying to client.run_actions text:' + str(text))
                         resp = client.run_actions(fb_id,str(text))
                         pprint('send to wit : ' + str(resp))
-                        post_facebook_message(fb_id, str(resp))
+                        #post_facebook_message(fb_id, str(resp))
                         return HttpResponse()
                     except:
                         post_facebook_message(fb_id,'wit.ai error') 
