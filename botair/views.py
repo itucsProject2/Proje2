@@ -35,7 +35,7 @@ def send(request, response):
     text = response['text']
     pprint('In send, text = ' + str(text))
     # send message
-    post_facebook_message(fb_id, text)
+    post_facebook_message(fb_id, str(text))
 
 def my_action(request):
     print('Received from user...', request['text'])
