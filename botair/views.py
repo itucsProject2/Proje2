@@ -54,6 +54,7 @@ actions = {
 # Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
+client.interactive()
 
 def getEntityFromWit(textMessage):
     try:
@@ -95,7 +96,7 @@ class BotairView(generic.View):
                 try:
                     #resp = sendToWit(str(text))
                     pprint('trying to client.run_actions')
-                    resp = client.run_actions(fb_id,str(text), {})
+                    resp = client.run_actions(session_id = fb_id,message = str(text))
                     pprint('send to wit : ' + str(resp))
                     post_facebook_message(fb_id, str(resp))
                     return HttpResponse()
