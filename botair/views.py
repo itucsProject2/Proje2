@@ -8,21 +8,17 @@ from django.shortcuts import render
 import requests
 from pprint import pprint
 
-# Create your views here.
-def fb_message(sender_id, text):
-    """
-    Function for returning response to messenger
-    """
-    data = {
-        'recipient': {'id': sender_id},
-        'message': {'text': text}
-    }
-    # Setup the query string with your PAGE TOKEN
-    qs = 'access_token=' + FB_PAGE_TOKEN
-    # Send POST request to messenger
-    resp = requests.post('https://graph.facebook.com/me/messages?' + qs,
-                         json=data)
-    return resp.content
+
+
+
+def post_facebook_message(fbid, message):           
+        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
+        data = {
+            'recipent':{'id': fbid},
+            'message':{'text':message}
+        }
+        status = requests.post(post_message_url, json=data)
+        pprint(status.json())
 
 def first_entity_value(entities, entity):
     """
@@ -63,12 +59,6 @@ client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 
 
-
-def post_facebook_message(fbid, recevied_message):           
-        post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
-        response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":recevied_message}})
-        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        pprint(status.json())
 
 
 class BotairView(generic.View):
