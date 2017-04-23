@@ -85,7 +85,7 @@ class BotairView(generic.View):
             for message in entry['messaging']:
            
                 if 'message' in message:
-                    pprint('Message in post:' + message) 
+                    pprint('Message in post:' + str(message)) 
                     fb_id = message['sender']['id']
                     text = message['message']['text']
                     try:
