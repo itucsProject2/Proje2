@@ -47,7 +47,6 @@ def checkInfo():
     print()
 
 def resetAll(context,entities):
-    pprint(str(entities))
     initializeWit()
 
 def printFlights():
