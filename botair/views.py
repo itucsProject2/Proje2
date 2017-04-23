@@ -84,39 +84,30 @@ class BotairView(generic.View):
         # Facebook recommends going through every entry since they might send
         # multiple messages in a single call during high load
         for entry in incoming_message['entry']:
-            messages = entry['messaging']
-            pprint(messages)
-            if messages[0]:
-                # Get the first message
-                message = messages[0]
-                fb_id = message['sender']['id']
-                text = message['message']['text']
-                try:
-                    #resp = sendToWit(str(text))
-                    pprint('trying to client.run_actions')
-                    resp = client.run_actions(fb_id,text)
-                    pprint('send to wit : ' + str(resp))
-                    post_facebook_message(fb_id, str(resp))
-                    return HttpResponse()
-                except:
-                    post_facebook_message(fb_id,'wit.ai error') 
-                    return HttpResponse()    
+            
+            for message in entry['messaging']:
+           
+                if 'message' in message:
+          
               
-            else:
-                 # Returned another event
-                 pprint('another event')
-                 return 'Received Different Event'
+                    fb_id = message['sender']['id']
+                    text = message['message']['text']
+                    try:
+                        #resp = sendToWit(str(text))
+                        pprint('trying to client.run_actions')
+                        resp = client.run_actions(fb_id,text)
+                        pprint('send to wit : ' + str(resp))
+                        post_facebook_message(fb_id, str(resp))
+                        return HttpResponse()
+                    except:
+                        post_facebook_message(fb_id,'wit.ai error') 
+                        return HttpResponse()    
+              
+                 
                 
-                    # Print the message to the terminal
                 
              
-                    #resp = witOperations.sendToWit(message['message']['text']) 
-                    #if resp is None:
-                     #   resp = 'nothing in here'
-                    #pprint('Yay, got Wit.ai response: ' + str(resp))
-                 #   post_facebook_message(message['sender']['id'],str(resp))      
-    #    return HttpResponse()
-    
+                   
 
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
