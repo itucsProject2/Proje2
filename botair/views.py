@@ -52,7 +52,8 @@ actions = {
 }
 
 # Setup Wit Client
-client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+client = Wit(access_token='KVCNXSS7SD5RENA5PQ6QBS242ETDIBHC', actions=actions)
+#DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 
 def sendToWit(textMessage):
     try:
