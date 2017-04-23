@@ -42,13 +42,13 @@ def send(request, response):
 
 def my_action(request):
     print('Received from user...', request['text'])
-
+    
 def checkInfo():
     print()
 
 def resetAll(context,entities):
     pprint(str(entities))
-    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+    initializeWit()
 
 def printFlights():
     print()
@@ -60,9 +60,11 @@ actions = {
     'resetAll': resetAll,
     'printFlighs': printFlights,
 }
-
-# Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+# Setup Wit Client
+def initializeWit():
+    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
 
