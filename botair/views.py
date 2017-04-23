@@ -37,21 +37,28 @@ class BotairView(generic.View):
         # Facebook recommends going through every entry since they might send
         # multiple messages in a single call during high load
         for entry in incoming_message['entry']:
-            for message in entry['messaging']:
-                # Check to make sure the received call is a message call
-                # This might be delivery, optin, postback for other events 
-                if 'message' in message:
+            messages = entry['messaging']
+            pprint(messages)
+            if messages[0]:
+                # Get the first message
+                message = messages[0]
+                fb_id = message['sender']['id']
+                text = message['message']['text']
+                client.run_actions(session_id=fb_id, message=text)
+                #post_facebook_message(message['sender']['id'],str(resp)) 
+            else:
+                 # Returned another event
+                 return 'Received Different Event'
+            return   None     
                     # Print the message to the terminal
-                    pprint(message)
-                    # Assuming the sender only sends text. Non-text messages like stickers, audio, pictures
-                    # are sent as attachments and must be handled accordingly.
-                   # locationString = []
-                    resp = witOperations.sendToWit(message['message']['text']) 
-                    if resp is None:
-                        resp = 'nothing in here'
-                    pprint('Yay, got Wit.ai response: ' + str(resp))
-                    post_facebook_message(message['sender']['id'],str(resp))      
-        return HttpResponse()
+                
+             
+                    #resp = witOperations.sendToWit(message['message']['text']) 
+                    #if resp is None:
+                     #   resp = 'nothing in here'
+                    #pprint('Yay, got Wit.ai response: ' + str(resp))
+                 #   post_facebook_message(message['sender']['id'],str(resp))      
+    #    return HttpResponse()
     
 
 #class BotairView(generic.View):
