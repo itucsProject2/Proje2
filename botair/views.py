@@ -34,8 +34,11 @@ def send(request, response):
     fb_id = request['session_id']
     text = response['text']
     pprint('In send, text = ' + str(text))
+    t = str(text)
+    t = t[:-1]
+    t = t[2:]
     # send message
-    post_facebook_message(fb_id, str(text))
+    post_facebook_message(fb_id, str(t))
 
 def my_action(request):
     print('Received from user...', request['text'])
