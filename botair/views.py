@@ -46,7 +46,7 @@ def my_action(request):
 def checkInfo():
     print()
 
-def resetAll():
+def resetAll(context,entities):
     client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 
 def printFlights():
