@@ -12,11 +12,9 @@ from django.core.handlers.exception import response_for_exception
 
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
-        data = {
-            'recipent':{'id': fbid},
-            'message':{'text':message}
-        }
-        status = requests.post(post_message_url, json=data)
+        response_msg =json.dumps({"recipient":{"id":fbid}, "message":{"text":message}})
+      
+        status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
         pprint(status.json())
 
 
