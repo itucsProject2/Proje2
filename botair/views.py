@@ -94,7 +94,7 @@ class BotairView(generic.View):
                     text = message['message']['text']
                     try:
                         #resp = sendToWit(str(text))
-                        pprint('trying to client.run_actions')
+                        pprint('trying to client.run_actions text:' + str(text))
                         resp = client.run_actions(fb_id,str(text))
                         pprint('send to wit : ' + str(resp))
                         post_facebook_message(fb_id, str(resp))
