@@ -52,7 +52,7 @@ actions = {
 }
 
 # Setup Wit Client
-client = Wit(access_token='KVCNXSS7SD5RENA5PQ6QBS242ETDIBHC', actions=actions)
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 
 def sendToWit(textMessage):
@@ -93,7 +93,7 @@ class BotairView(generic.View):
                 fb_id = message['sender']['id']
                 text = message['message']['text']
                 try:
-                    resp = sendToWit(text)
+                    resp = sendToWit(str(text))
                     pprint('send to wit : ' + resp)
                     post_facebook_message(fb_id, resp)
                     #client.run_actions(session_id=fb_id, message=text)
