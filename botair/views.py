@@ -1,5 +1,5 @@
 from django.views import generic
-from botair import witOperations
+from wit import Wit
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
@@ -9,6 +9,60 @@ import requests
 from pprint import pprint
 
 # Create your views here.
+def fb_message(sender_id, text):
+    """
+    Function for returning response to messenger
+    """
+    data = {
+        'recipient': {'id': sender_id},
+        'message': {'text': text}
+    }
+    # Setup the query string with your PAGE TOKEN
+    qs = 'access_token=' + FB_PAGE_TOKEN
+    # Send POST request to messenger
+    resp = requests.post('https://graph.facebook.com/me/messages?' + qs,
+                         json=data)
+    return resp.content
+
+def first_entity_value(entities, entity):
+    """
+    Returns first entity value
+    """
+    if entity not in entities:
+        return None
+    val = entities[entity][0]['value']
+    if not val:
+        return None
+    return val['value'] if isinstance(val, dict) else val
+
+def send(request, response):
+    """
+    Sender function
+    """
+    # We use the fb_id as equal to session_id
+    fb_id = request['session_id']
+    text = response['text']
+    # send message
+    fb_message(fb_id, text)
+
+
+def my_action(request):
+    print('Received from user...', request['text'])
+
+
+actions = {
+    'send': send,
+    'receive':my_action,
+    
+}
+
+
+# Setup Wit Client
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+
+
+
+
 
 def post_facebook_message(fbid, recevied_message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
