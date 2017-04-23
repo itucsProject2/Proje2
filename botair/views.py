@@ -9,8 +9,6 @@ import requests
 from pprint import pprint
 
 
-
-
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
         data = {
@@ -39,7 +37,7 @@ def send(request, response):
     fb_id = request['session_id']
     text = response['text']
     # send message
-    fb_message(fb_id, text)
+    post_facebook_message(fb_id, text)
 
 
 def my_action(request):
@@ -55,10 +53,6 @@ actions = {
 
 # Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
-
-
-
-
 
 
 class BotairView(generic.View):
@@ -88,12 +82,18 @@ class BotairView(generic.View):
                 message = messages[0]
                 fb_id = message['sender']['id']
                 text = message['message']['text']
-                client.run_actions(session_id=fb_id, message=text)
-                #post_facebook_message(message['sender']['id'],str(resp)) 
+                try:
+                    client.run_actions(session_id=fb_id, message=text)
+                    return HttpResponse()
+                except:
+                    post_facebook_message(fb_id,'wit.ai error') 
+                    return HttpResponse()    
+              
             else:
                  # Returned another event
+                 pprint('another event')
                  return 'Received Different Event'
-            return   None     
+                
                     # Print the message to the terminal
                 
              
