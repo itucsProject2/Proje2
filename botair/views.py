@@ -93,7 +93,8 @@ class BotairView(generic.View):
                 fb_id = message['sender']['id']
                 text = message['message']['text']
                 try:
-                    resp = sendToWit(str(text))
+                    #resp = sendToWit(str(text))
+                    resp = client.run_actions(fb_id,text, {})
                     pprint('send to wit : ' + resp)
                     #post_facebook_message(fb_id, resp)
                     client.run_actions(session_id=fb_id, message=text)
