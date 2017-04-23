@@ -43,11 +43,21 @@ def send(request, response):
 def my_action(request):
     print('Received from user...', request['text'])
 
+def checkInfo():
+    print()
+
+def resetAll():
+    print()
+
+def printFlights():
+    print()
 
 actions = {
     'send': send,
     'my_action':my_action,
-    
+    'checkInfo': checkInfo,
+    'resetAll': resetAll,
+    'printFlighs': printFlights,
 }
 
 # Setup Wit Client
