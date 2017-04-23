@@ -109,7 +109,7 @@ class BotairView(generic.View):
                         
                         #post_facebook_message(fb_id, str(resp))
                         return HttpResponse()
-                    except Exception, e:
+                    except Exception as e:
                         post_facebook_message(fb_id,'wit.ai error:' + str(e)) 
                         return HttpResponse()
                     
