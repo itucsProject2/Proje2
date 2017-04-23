@@ -94,7 +94,8 @@ class BotairView(generic.View):
                 text = message['message']['text']
                 try:
                     #resp = sendToWit(str(text))
-                    resp = client.converse(fb_id,text, {})
+                    pprint('trying to cluent.run_actions')
+                    resp = client.run_actions(fb_id,text, {})
                     pprint('send to wit : ' + resp)
                     post_facebook_message(fb_id, resp)
                     return HttpResponse()
