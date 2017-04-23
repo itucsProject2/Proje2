@@ -47,7 +47,7 @@ def my_action(request):
 
 actions = {
     'send': send,
-    'receive':my_action,
+    'my_action':my_action,
     
 }
 
@@ -94,10 +94,10 @@ class BotairView(generic.View):
                 text = message['message']['text']
                 try:
                     #resp = sendToWit(str(text))
-                    pprint('trying to cluent.run_actions')
+                    pprint('trying to client.run_actions')
                     resp = client.run_actions(fb_id,text, {})
-                    pprint('send to wit : ' + resp)
-                    post_facebook_message(fb_id, resp)
+                    pprint('send to wit : ' + str(resp))
+                    post_facebook_message(fb_id, str(resp))
                     return HttpResponse()
                 except:
                     post_facebook_message(fb_id,'wit.ai error') 
