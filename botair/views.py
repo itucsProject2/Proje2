@@ -15,7 +15,7 @@ def post_facebook_message(fbid, message):
         response_msg =json.dumps({"recipient":{"id":fbid}, "message":{"text":message}})
       
         status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-        pprint(status.json())
+        pprint('In post_facebook_message function: ' + status.json())
 
 
 def first_entity_value(entities, entity):
@@ -49,7 +49,7 @@ actions = {
 # Setup Wit Client
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
-client.interactive()
+#client.interactive()
 
 def getEntityFromWit(textMessage):
     try:
@@ -85,7 +85,7 @@ class BotairView(generic.View):
             for message in entry['messaging']:
            
                 if 'message' in message:
-                    pprint(message) 
+                    pprint('Message in post:' + message) 
                     fb_id = message['sender']['id']
                     text = message['message']['text']
                     try:
@@ -98,13 +98,7 @@ class BotairView(generic.View):
                         return HttpResponse()
                     except:
                         post_facebook_message(fb_id,'wit.ai error') 
-                        return HttpResponse()    
-              
-                 
-                
-                
-             
-                   
+                        return HttpResponse()
 
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
