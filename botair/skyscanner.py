@@ -22,13 +22,13 @@ def livePrices(request):
 
 def flightQuery(request):
     
-    query = ['bos'] * 6
-    query[0] = 'USD'
-    query[1] = place('ataturk')   # origin place
-    query[2] = place('rome')  # destination place
-    query[3] = None # outbounddate
-    query[4] = None                 # inbounddate
-    query[5] = 1        # kac tane sonuc istiyor
+    query = ['bos'] * 4
+    
+    query[0] = place('ataturk')   # origin place
+    query[1] = place('rome')  # destination place
+    query[2] = '2017-05' # outbounddate
+    query[3] = '2017-06'                 # inbounddate
+    
     
     a = cheapestQuotes(query)
     if  a == None:
