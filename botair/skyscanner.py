@@ -38,19 +38,24 @@ def flightQuery(request):
 
 def cheapestQuotes(query):
     
-    if query[4] == None:
-        query[4] = ''
+    if len(query) == 2:
+        outbounddate = str(datetime.date.today())
+        inbounddate = ''
+    elif len(query) == 3:
+        outbounddate = query[2]
+        inbounddate = ''
+    else:
+        outbounddate = query[2]
+        inbounddate = query[3]
         
-    if  query[3] == None:
-        query[3] = str(datetime.date.today())
+        if len(outbounddate) != len(inbounddate):
+            return 'Tarihler Eslesmiyor'
         
-    if query[1] == '' or query[2] == '':
-        return None
-    
-    if (len(query[4]) != 0 and (len(query[3]) != len(query[4]))) or (len(query[4]) == 0 and len(query[3]) == 0):
-        return None
+    originplace = query[0]
+    destinationplace = query[1]
+
         
-    if query[4] == '':
+    if inbounddate == '':
         one_way = True
     else:
         one_way = False
@@ -61,17 +66,16 @@ def cheapestQuotes(query):
     result = flights_cache_service.get_cheapest_quotes(
     
         market = 'tr',
-        currency = query[0],
+        currency = 'USD',
         locale = 'en-US',
-        originplace = query[1],
-        destinationplace = query[2],
-        outbounddate = query[3],
-        inbounddate= query[4]).parsed
+        originplace = originplace,
+        destinationplace = destinationplace,
+        outbounddate = outbounddate,
+        inbounddate= inbounddate).parsed
     
     if len(result['Quotes']) == 0:  # parametrelere uyan sonuc yok
         #return HttpResponse('ADAM GIBI ARAMA YAP LAN1')
-        data = None
-        return data
+        return 'Parametrelere Uyan Sonuc Yok'
     
     queryIndex = 0  # gecerli query index
     
