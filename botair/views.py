@@ -116,7 +116,7 @@ class BotairView(generic.View):
                         #resp = sendToWit(str(text))
                         pprint('trying to client.run_actions text:' + str(text))
                         result = getEntityFromWit(text)
-                        if result == ' ' or text.find("error") == -1:
+                        if result == ' ' or text.find("error") == -1 or text.find("See") == -1 :
                             client.run_actions(fb_id,text)
                         else:
                             post_facebook_message(fb_id, str(result))
