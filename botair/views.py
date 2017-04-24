@@ -163,8 +163,8 @@ def cheapestQuotes(query):
         market = 'tr',
         currency = 'USD',
         locale = 'en-US',
-        originplace = originplace,
-        destinationplace = destinationplace,
+        originplace = place(originplace),
+        destinationplace = place(destinationplace),
         outbounddate = outbounddate,
         inbounddate= inbounddate).parsed
     
@@ -215,6 +215,20 @@ def cheapestQuotes(query):
     #para = result['Quotes'][0]['MinPrice']
     #para = result.json()
     return data
+
+def place(yer):
+    if yer == '':
+        return ''
+    result = requests.get('http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/tr/TRY/en-US?query=' + yer + '&apiKey=bo222919948041713910427845435861')
+    place = result.json()
+    if len(place['Places']) == 0:
+        return ''
+    
+    CountryName = place['Places'][0]['CountryName']
+    CityId = place['Places'][0]['CityId']
+    PlaceName = place['Places'][0]['PlaceName']
+    PlaceId = place['Places'][0]['PlaceId']     # havaalani id
+    return str(PlaceId)
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
 #        if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
