@@ -9,6 +9,9 @@ import requests
 from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
+flyFlag = False
+infoArray = [None] * 4
+
 
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
@@ -42,24 +45,13 @@ def send(request, response):
 
 def my_action(request):
     print('Received from user...', request['text'])
-    
-def checkInfo():
-    print()
-
-def resetAll(context,entities):
-    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
-
-def printFlights():
-    print()
 
 actions = {
     'send': send,
     'my_action':my_action,
-    'checkInfo': checkInfo,
-    'resetAll': resetAll,
-    'printFlighs': printFlights,
 }
-client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+ 
+
 
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
