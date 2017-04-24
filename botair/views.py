@@ -56,7 +56,7 @@ actions = {
 
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
-
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 def getEntityFromWit(textMessage):
     try:
         result = []
