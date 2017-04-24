@@ -110,7 +110,7 @@ class BotairView(generic.View):
                         if result == ' ':
                             client.run_actions(fb_id,text)
                         else:
-                            post_facebook_message(fbid, str(result))
+                            post_facebook_message(fb_id, str(result))
                         #pprint('resp to wit : ' + str(resp))
                         
                         #post_facebook_message(fb_id, str(resp))
