@@ -75,7 +75,7 @@ def getEntityFromWit(textMessage):
                 pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
-                returnMessage = str(skyscanner.cheapestQuotes(result))
+                returnMessage = str(skyscanner.cheapestQuotes(str(result)))
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
                 return returnMessage
