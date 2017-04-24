@@ -64,9 +64,11 @@ def getEntityFromWit(textMessage):
         resp = client.message(textMessage)
         pprint('resp in getEntitiy:' + str(resp))
         if 'location' in resp['entities']:
+            pprint('KONTROL1')
             for location in resp['entities']['location']:
                 result.append(str(location['value']))
         if 'datetime' in resp['entities']:  
+            pprint('KONTROL2')
             for datetime in resp['entities']['datetime']:
                 result.append(str(datetime['value']))
         if len(result) != 0:
@@ -76,7 +78,7 @@ def getEntityFromWit(textMessage):
                 returnMessage = skyscanner.cheapestQuotes(result)
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
-                return str(returnMessage)
+                return returnMessage
         return ' '
     except:
         return('getEntityFromWit: send to wit.ai error')

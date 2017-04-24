@@ -2,6 +2,7 @@ from skyscanner.skyscanner import Flights
 from skyscanner.skyscanner import FlightsCache
 from django.http import HttpResponse
 import requests, json, datetime
+import pprint
 
 
 def livePrices(request):
@@ -37,7 +38,7 @@ def flightQuery(request):
         return HttpResponse(str(a))
 
 def cheapestQuotes(query):
-    
+    pprint('CHEAPEST')
     if len(query) == 2:
         outbounddate = str(datetime.date.today())
         inbounddate = ''
