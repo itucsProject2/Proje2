@@ -1,5 +1,6 @@
 from django.views import generic
 from wit import Wit
+from botair import skyscanner
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
@@ -8,6 +9,9 @@ from django.shortcuts import render
 import requests
 from pprint import pprint
 from django.core.handlers.exception import response_for_exception
+
+flyFlag = False
+infoArray = [None] * 4
 
 
 def post_facebook_message(fbid, message):           
@@ -38,37 +42,39 @@ def send(request, response):
     t = t[:-1]
     t = t[2:]
     # send message
+    
     post_facebook_message(fb_id, str(t))
 
 def my_action(request):
     print('Received from user...', request['text'])
-    
-def checkInfo():
-    print()
-
-def resetAll(context,entities):
-    client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
-
-def printFlights():
-    print()
 
 actions = {
     'send': send,
     'my_action':my_action,
-    'checkInfo': checkInfo,
-    'resetAll': resetAll,
-    'printFlighs': printFlights,
 }
-client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
+ 
+
 
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
-
+client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 def getEntityFromWit(textMessage):
     try:
+        result = []
         resp = client.message(textMessage)
+        if 'location' in resp['entities']:
+            for location in resp['entities']['location']:
+                result.append(str(location['value']))
+        if 'datetime' in resp['entities']:  
+            for datetime in resp['entities']['datetime']:
+                result.append(str(datetime['value']))
+        if len(result) != 0:
+                if len(result) == 1:
+                    return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
+                #returnMessage = skyscanner.cheapestQuotes(result)
+                return 'Listing flights from '+result[0]+' to '+result[1]
         pprint('getEntityFromWit: get from wit:' + str(resp))
-        return resp
+        return ' '
     except:
         return('getEntityFromWit: send to wit.ai error')
         
@@ -104,7 +110,11 @@ class BotairView(generic.View):
                     try:
                         #resp = sendToWit(str(text))
                         pprint('trying to client.run_actions text:' + str(text))
-                        client.run_actions(fb_id,text)
+                        result = getEntityFromWit(text)
+                        if result == ' ':
+                            client.run_actions(fb_id,text)
+                        else:
+                            post_facebook_message(fb_id, str(result))
                         #pprint('resp to wit : ' + str(resp))
                         
                         #post_facebook_message(fb_id, str(resp))
