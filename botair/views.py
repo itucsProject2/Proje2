@@ -75,13 +75,13 @@ def getEntityFromWit(textMessage):
                 pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
-                returnMessage = skyscanner.cheapestQuotes(result)
+                returnMessage = str(skyscanner.cheapestQuotes(result))
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
                 return returnMessage
         return ' '
-    except:
-        return('getEntityFromWit: send to wit.ai error')
+    except Exception as e:
+        return('getEntityFromWit: send to wit.ai error: ' + str(e))
         
 
 
