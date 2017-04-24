@@ -62,6 +62,7 @@ def getEntityFromWit(textMessage):
     try:
         result = []
         resp = client.message(textMessage)
+        pprint('resp in getEntitiy:' + str(resp))
         if 'location' in resp['entities']:
             for location in resp['entities']['location']:
                 result.append(str(location['value']))
