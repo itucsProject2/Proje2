@@ -1,12 +1,13 @@
 from django.views import generic
 from wit import Wit
-from botair import skyscanner
+from skyscanner.skyscanner import FlightsCache
+#from botair import skyscanner
 from django.http.response import HttpResponse
 import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-import requests
+import requests, datetime
 from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
@@ -75,7 +76,7 @@ def getEntityFromWit(textMessage):
                 pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
-                returnMessage = str(skyscanner.cheapestQuotes(result))
+                returnMessage = str(cheapestQuotes(result))
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
                 return returnMessage
@@ -130,6 +131,90 @@ class BotairView(generic.View):
                     
                 return HttpResponse()
 
+def cheapestQuotes(query):
+    pprint('CHEAPEST')
+    if len(query) == 2:
+        outbounddate = str(datetime.date.today())
+        inbounddate = ''
+    elif len(query) == 3:
+        outbounddate = query[2]
+        inbounddate = ''
+    else:
+        outbounddate = query[2]
+        inbounddate = query[3]
+        
+        if len(outbounddate) != len(inbounddate):
+            return 'Tarihler Eslesmiyor'
+        
+    originplace = query[0]
+    destinationplace = query[1]
+
+        
+    if inbounddate == '':
+        one_way = True
+    else:
+        one_way = False
+        
+    data = json.loads(json.dumps({'price': 0, 'direct': True, 'out': {'date': '', 'origin':'', 'destination': '', 'carrier':''}, 'in':{'date': '', 'origin':'', 'destination': '', 'carrier':''}})) # direct???
+    flights_cache_service = FlightsCache('bo222919948041713910427845435861')
+    #return HttpResponse(query)
+    result = flights_cache_service.get_cheapest_quotes(
+    
+        market = 'tr',
+        currency = 'USD',
+        locale = 'en-US',
+        originplace = originplace,
+        destinationplace = destinationplace,
+        outbounddate = outbounddate,
+        inbounddate= inbounddate).parsed
+    
+    if len(result['Quotes']) == 0:  # parametrelere uyan sonuc yok
+        #return HttpResponse('ADAM GIBI ARAMA YAP LAN1')
+        return 'Parametrelere Uyan Sonuc Yok'
+    
+    queryIndex = 0  # gecerli query index
+    
+    for i in range(0,len(result['Quotes'])):
+        
+        if one_way and not 'InboundLeg' in result['Quotes'][i]:
+            queryIndex = i
+            break
+        elif not one_way and 'InboundLeg' in result['Quotes'][i]:
+            queryIndex = i
+            break
+        
+    data['direct'] = result['Quotes'][queryIndex]['Direct']
+    data['price'] = result['Quotes'][queryIndex]['MinPrice']
+    
+    temp = result['Quotes'][queryIndex]['OutboundLeg']['DepartureDate']
+    data['out']['date'] = temp[:10]
+    
+    if one_way != True:
+        temp = result['Quotes'][queryIndex]['InboundLeg']['DepartureDate']
+        data['in']['date'] = temp[:10]
+        
+    for i in range(0, len(result['Places'])):   # DEPARTURE AIRPORTS
+        if result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][queryIndex]['OutboundLeg']['OriginId']:   #out
+            data['out']['origin'] = result['Places'][i]['Name']
+        if result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][queryIndex]['OutboundLeg']['DestinationId']:   #out
+            data['out']['destination'] =result['Places'][i]['Name']
+        
+        if one_way != True and result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][queryIndex]['InboundLeg']['OriginId']:   #in
+            data['in']['origin'] = result['Places'][i]['Name']
+            
+        if one_way != True and result['Places'][i]['Type'] == 'Station' and result['Places'][i]['PlaceId'] == result['Quotes'][queryIndex]['InboundLeg']['DestinationId']:   #in
+            data['in']['destination'] = result['Places'][i]['Name']
+            
+    for i in range(0, len(result['Carriers'])):     # CARRIER NAMES
+        if result['Carriers'][i]['CarrierId'] == result['Quotes'][queryIndex]['OutboundLeg']['CarrierIds'][0]:   #out
+            data['out']['carrier'] = result['Carriers'][i]['Name']
+            
+        if one_way != True and result['Carriers'][i]['CarrierId'] == result['Quotes'][queryIndex]['InboundLeg']['CarrierIds'][0] and one_way != True:   #in
+            data['in']['carrier'] = result['Carriers'][i]['Name']
+    
+    #para = result['Quotes'][0]['MinPrice']
+    #para = result.json()
+    return data
 #class BotairView(generic.View):
 #    def get(self, request, *args, **kwargs):
 #        if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
