@@ -79,10 +79,11 @@ def getEntityFromWit(textMessage):
                 returnMessage = cheapestQuotes(result)
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + str(returnMessage))
-                if returnMessage['in']['origin'] == '':
-                    return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + '$ ' + str(returnMessage['price'])
-                else:
-                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier'] + '\nRETURN:\nFrom: ' + returnMessage['in']['origin'] +'\nTo: ' + returnMessage['in']['destination'] +'\nDate: ' + returnMessage['in']['date']  + '\nCarrier: ' + returnMessage['in']['carrier'] + '\nPrice: ' + '$ '+ str(returnMessage['price'])
+                if 'price' in returnMessage:
+                    if returnMessage['in']['origin'] == '':
+                        return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + '$ ' + str(returnMessage['price'])
+                    else:
+                        return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier'] + '\nRETURN:\nFrom: ' + returnMessage['in']['origin'] +'\nTo: ' + returnMessage['in']['destination'] +'\nDate: ' + returnMessage['in']['date']  + '\nCarrier: ' + returnMessage['in']['carrier'] + '\nPrice: ' + '$ '+ str(returnMessage['price'])
 
         return ' '
     except Exception as e:
