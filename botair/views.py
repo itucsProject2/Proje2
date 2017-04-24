@@ -70,11 +70,11 @@ def getEntityFromWit(textMessage):
             for datetime in resp['entities']['datetime']:
                 result.append(str(datetime['value']))
         if len(result) != 0:
+                pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
                 #returnMessage = skyscanner.cheapestQuotes(result)
                 return 'Listing flights from '+result[0]+' to '+result[1]
-        pprint('getEntityFromWit: get from wit:' + str(resp))
         return ' '
     except:
         return('getEntityFromWit: send to wit.ai error')
