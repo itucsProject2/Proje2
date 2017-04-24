@@ -80,9 +80,9 @@ def getEntityFromWit(textMessage):
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + str(returnMessage))
                 if returnMessage['in']['origin'] == '':
-                    return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price'])
+                    return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + '$ ' + str(returnMessage['price'])
                 else:
-                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price']) + '\nRETURN:\nFrom: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: '
+                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: '  + '\nRETURN:\nFrom: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier'] + '$ '+ str(returnMessage['price'])
 
         return ' '
     except Exception as e:
@@ -150,9 +150,11 @@ def cheapestQuotes(query):
         if len(outbounddate) != len(inbounddate):
             return 'Tarihler Eslesmiyor'
         
-    originplace = query[0]
-    destinationplace = query[1]
-
+    originplace = place(query[0])
+    destinationplace = place(query[1])
+    
+    if originplace == '' or destinationplace == '':
+        return 'Yanlis Lokasyon'
         
     if inbounddate == '':
         one_way = True
@@ -167,8 +169,8 @@ def cheapestQuotes(query):
         market = 'tr',
         currency = 'USD',
         locale = 'en-US',
-        originplace = place(originplace),
-        destinationplace = place(destinationplace),
+        originplace = originplace,
+        destinationplace = destinationplace,
         outbounddate = outbounddate[:10],
         inbounddate= inbounddate[:10]).parsed
     
