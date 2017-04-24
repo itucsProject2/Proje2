@@ -41,6 +41,7 @@ def send(request, response):
     t = t[:-1]
     t = t[2:]
     # send message
+    
     post_facebook_message(fb_id, str(t))
 
 def my_action(request):
@@ -58,9 +59,18 @@ actions = {
 
 def getEntityFromWit(textMessage):
     try:
+        result = []
         resp = client.message(textMessage)
+        if 'location' in resp['entities']:
+            for location in resp['entities']['location']:
+                result.append(str(location['value']))
+        if 'datetime' in resp['entities']:  
+            for datetime in resp['entities']['datetime']:
+                result.append(str(datetime['value']))
+        if len(result) != 0:
+            return result
         pprint('getEntityFromWit: get from wit:' + str(resp))
-        return resp
+        return ' '
     except:
         return('getEntityFromWit: send to wit.ai error')
         
@@ -96,7 +106,11 @@ class BotairView(generic.View):
                     try:
                         #resp = sendToWit(str(text))
                         pprint('trying to client.run_actions text:' + str(text))
-                        client.run_actions(fb_id,text)
+                        result = getEntityFromWit(text)
+                        if result == ' ':
+                            client.run_actions(fb_id,text)
+                        else:
+                            post_facebook_message(fbid, str(result))
                         #pprint('resp to wit : ' + str(resp))
                         
                         #post_facebook_message(fb_id, str(resp))
