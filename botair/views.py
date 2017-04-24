@@ -60,7 +60,7 @@ actions = {
 #client.interactive()
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 def getEntityFromWit(textMessage):
-    #try:
+    try:
         result = []
         resp = client.message(textMessage)
         pprint('resp in getEntitiy:' + str(resp))
@@ -79,10 +79,14 @@ def getEntityFromWit(textMessage):
                 returnMessage = str(cheapestQuotes(result))
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
-                return returnMessage
+                if returnMessage['in']['origin'] == '':
+                    return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + returnMessage['price']
+                else:
+                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + returnMessage['price'] + 'RETURN:\nFrom: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + returnMessage['price']
+
         return ' '
-    #except Exception as e:
-        #return('getEntityFromWit: send to wit.ai error: ' + str(e))
+    except Exception as e:
+        return('getEntityFromWit: send to wit.ai error: ' + str(e))
         
 
 
@@ -165,8 +169,8 @@ def cheapestQuotes(query):
         locale = 'en-US',
         originplace = place(originplace),
         destinationplace = place(destinationplace),
-        outbounddate = outbounddate,
-        inbounddate= inbounddate).parsed
+        outbounddate = outbounddate[:10],
+        inbounddate= inbounddate[:10]).parsed
     
     if len(result['Quotes']) == 0:  # parametrelere uyan sonuc yok
         #return HttpResponse('ADAM GIBI ARAMA YAP LAN1')
