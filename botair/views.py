@@ -59,7 +59,7 @@ actions = {
 #client.interactive()
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
 def getEntityFromWit(textMessage):
-    try:
+    #try:
         result = []
         resp = client.message(textMessage)
         pprint('resp in getEntitiy:' + str(resp))
@@ -75,13 +75,13 @@ def getEntityFromWit(textMessage):
                 pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
-                returnMessage = str(skyscanner.cheapestQuotes(str(result)))
+                returnMessage = str(skyscanner.cheapestQuotes(result))
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + returnMessage)
                 return returnMessage
         return ' '
-    except Exception as e:
-        return('getEntityFromWit: send to wit.ai error: ' + str(e))
+    #except Exception as e:
+        #return('getEntityFromWit: send to wit.ai error: ' + str(e))
         
 
 
