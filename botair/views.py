@@ -78,7 +78,7 @@ def getEntityFromWit(textMessage):
                     return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
                 returnMessage = cheapestQuotes(result)
                 #return 'Listing flights from '+result[0]+' to '+result[1]
-                pprint('SKYSCANNER = ' + returnMessage)
+                pprint('SKYSCANNER = ' + str(returnMessage))
                 if returnMessage['in']['origin'] == '':
                     return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + returnMessage['price']
                 else:
