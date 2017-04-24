@@ -82,7 +82,7 @@ def getEntityFromWit(textMessage):
                 if returnMessage['in']['origin'] == '':
                     return 'From: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price'])
                 else:
-                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price']) + 'RETURN:\nFrom: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price'])
+                    return 'OUTGOING:\nFrom: '+ returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: ' + str(returnMessage['price']) + '\nRETURN:\nFrom: ' + returnMessage['out']['origin'] +'\nTo: ' + returnMessage['out']['destination'] +'\nDate: ' + returnMessage['out']['date']  + '\nCarrier: ' + returnMessage['out']['carrier']+ '\nPrice: '
 
         return ' '
     except Exception as e:
