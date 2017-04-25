@@ -11,9 +11,6 @@ import requests, datetime
 from pprint import pprint
 from django.core.handlers.exception import response_for_exception
 
-flyFlag = False
-infoArray = [None] * 4
-
 
 def post_facebook_message(fbid, message):           
         post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=EAAPkuzQTj44BAD9sswQ97woRBzCuQf2FKvB757oF674ZB8xGfWqAKpNxveBexZCKWOlaaMtxJXVf7nilIHZAPYZAbdY5OeUPFwZCXYxU4GJRGHlmxijBq28oVcLmYovOm2gDZCGpDttRlPLf1Gxr4qyflAmHX9Gny0aN8wsKBzOQZDZD' 
@@ -24,9 +21,6 @@ def post_facebook_message(fbid, message):
 
 
 def first_entity_value(entities, entity):
-    """
-    Returns first entity value
-    """
     if entity not in entities:
         return None
     val = entities[entity][0]['value']
@@ -54,8 +48,6 @@ actions = {
     'my_action':my_action,
 }
  
-
-
 #DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS
 #client.interactive()
 client = Wit(access_token='DJE4HFOBMAJO6DMIC2IEZRP5DDRQRZKS', actions=actions)
@@ -75,7 +67,7 @@ def getEntityFromWit(textMessage):
         if len(result) != 0:
                 pprint('result in get Entity: ' + str(result))
                 if len(result) == 1:
-                    return 'I couldnt find your destination in your message. Please enter your message like: "I want to go from '+result[0] +' to destination"'
+                    return 'I couldnt find your destination in your message. Please enter your message like: "I want to fly from Adana to Istanbul on 29 may and return back on 30 may"'
                 returnMessage = cheapestQuotes(result)
                 #return 'Listing flights from '+result[0]+' to '+result[1]
                 pprint('SKYSCANNER = ' + str(returnMessage))
@@ -91,8 +83,6 @@ def getEntityFromWit(textMessage):
     except Exception as e:
         return('getEntityFromWit: send to wit.ai error: ' + str(e))
         
-
-
 class BotairView(generic.View):
     def get(self, request, *args, **kwargs):
         if self.request.GET['hub.verify_token'] == '150120017150120021150130281':
@@ -178,7 +168,6 @@ def cheapestQuotes(query):
         inbounddate= inbounddate[:10]).parsed
     
     if len(result['Quotes']) == 0:  # parametrelere uyan sonuc yok
-        #return HttpResponse('ADAM GIBI ARAMA YAP LAN1')
         return 'Parametrelere Uyan Sonuc Yok'
     
     queryIndex = 0  # gecerli query index
