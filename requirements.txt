@@ -35,7 +35,7 @@ six==1.10.0
 skyscanner==1.1.4
 sshtunnel==0.1.2
 tabulate==0.7.7
-urllib3==1.16
+urllib3==1.26.5
 whitenoise==3.3.0
 Whoosh==2.7.4
 wit==4.2.0
